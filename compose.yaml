@@ -1,0 +1,7 @@
+services:
+  one_time_password:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ".:/opt/one_time_password"
