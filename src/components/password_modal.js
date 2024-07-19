@@ -1,64 +1,81 @@
 import {useState, useEffect} from "react";
 
-export default function PasswordModal({toggleIsOpen, isOpen, toggleIsRunning, isRunning}) {
-    const[otpNumber, setOtpNumber] = useState({});
+export default function PasswordModal({toggleIsOpen, isOpen}) {
+    const[otpNumber, setOtpNumber] = useState({
+        otp_1:"",
+        otp_2:"",
+        otp_3:"",
+        otp_4:"",
+        otp_5:"",
+        otp_6:""
+    })
     const[isFilled, setIsFilled] = useState(false);
     const[timer, setTimer] = useState(600);
-    const[isDone, setIsDone] = useState(false);
+    const UpDatedTimer = `${String(Math.floor(timer / 60)).padStart(2, "0")}:${String(timer % 60).padStart(2, "0")}`
 
-    //Funcion para que solo lea las teclas que son numeros/tab/delete
-    function handleKeyDown(event) {
-        if (isNaN(event.key) && event.keyCode !== 9 && event.keyCode !== 8) {
-          event.preventDefault(); // Prevenir la entrada del caracter
-        }
+//Funcion para que solo lea las teclas que son numeros/tab/delete
+    function handleKeyDown(e) {
+        if (isNaN(e.key) && e.keyCode !== 9 && e.keyCode !== 8) {
+            e.preventDefault(); // Prevenir la entrada del caracter
+        };
     };
-
-    //Valida cantidad de numeros dentro del otp
+//Funcion para cambiar de hover
+    function handleKeyUp(e, index) {
+        let currentInput= document.activeElement;
+        if(!isNaN(e.key) && index < 6){
+            let nextInput = currentInput.nextSibling;
+                while(nextInput && nextInput.nodeName.toLowerCase() !== 'input'){
+                    nextInput = nextInput.nextSibling;
+                }
+            nextInput.focus()
+        } else if (e.key === 'Backspace') {
+            let previousInput = currentInput.previousSibling;
+            while (previousInput && previousInput.nodeName.toLowerCase() !== 'input') {
+                previousInput = previousInput.previousSibling;
+            };
+            if (previousInput) {
+                previousInput.focus();
+            };
+        };
+    };
+// Comienza conteo para enviar un nuevo codigo
     useEffect(() => {
-        if(Object.keys(otpNumber).length < 6){
-            setIsFilled(false);
-        }else{
-            setIsFilled(true)
-        }
-    }, [otpNumber]);
-
-    //Activa o desactiva el button
-    useEffect(() => {
-        const submitButton = document.getElementById("submit-button");
-        if (submitButton) {
-            submitButton.disabled = !isFilled;
-        }
-    }, [isFilled]);
-    
-    // Comienza conteo para enviar un nuevo codigo
-    useEffect(() => {
-        if(timer > 0 && isRunning){
+        if(timer > 0 && isOpen){
             let intervalId = setInterval(() => {
                 setTimer((currentTimer) => currentTimer - 1)
             }, 1000)
             return () => (
                 clearInterval(intervalId)
             )
-        }  
-    }, [isRunning, isDone])
-
-    //Avisa cuando llega a 0 el conteo
-    useEffect(() => {
-        const error = new Error("Your password is expired");
-        if(timer === 0){
-            setIsDone(true)
+        }else if(timer === 0 && isOpen){
+            const error = new Error("Your password is expired");
             setTimeout(() => {
                 alert(error.message);
                 toggleIsOpen(false);
+                setTimer(600)
             }, 100);
-        };
-    }, [timer])
+        }else{
+            setTimer(600)
+        }
+    }, [isOpen, timer])  
 
-    let minutes = Math.floor(timer / 60);
-    let sec = timer % 60;
-    const UpDatedTimer = `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`
+//Valida cantidad de numeros dentro del otp
+    useEffect(() => {
+        console.log("otpNumber:", otpNumber);
+        const allFilled = Object.values(otpNumber).every(value => value !== "");
+        setIsFilled(allFilled)
 
-    //Controla el comportamiento al dar el submit
+    }, [otpNumber]);
+
+//Activa o desactiva el button
+    useEffect(() => {
+        const submitButton = document.getElementById("submit-button");
+        if (submitButton) {
+            submitButton.disabled = !isFilled;
+        }
+    }, [isFilled]); 
+
+//Controla el comportamiento al dar el submit
     function handleSubmit(event) {
         event.preventDefault();
         event.target.reset()
@@ -73,62 +90,85 @@ export default function PasswordModal({toggleIsOpen, isOpen, toggleIsRunning, is
     return(
         <div className={`form-wrapper ${isOpen ? "d-flex": null}`}>
             <form onSubmit={handleSubmit}>
-                <span className="back-button" onClick={() => {toggleIsOpen(!isOpen); toggleIsRunning(!isRunning)}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                <span className="back-button" onClick={() => {toggleIsOpen(!isOpen)}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                     </svg>
                 </span>
                 <div className="form-header">
                     <h3>One Time Password</h3>
                     <p>A one-time password has been generated and sent to the primary email address on your policy. Input the same to proceed further. Note that the OTP sent to you will be valid for 10 minutes.</p>
                 </div>
-                <div className="form-body">
-                    <fieldset>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-1" 
-                            id="otp-1"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_1: e.target.value})}/>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-2" 
-                            id="otp-2"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_2: e.target.value})}/>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-3" 
-                            id="otp-3"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_3: e.target.value})}/>
-                    </fieldset>
-                        <span className="hyphen">-</span>
-                    <fieldset>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-4" 
-                            id="otp-4"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_4: e.target.value})}/>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-5" 
-                            id="otp-5"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_5: e.target.value})}/>
-                        <input type="text" 
-                            maxlength="1" 
-                            name="otp-6" 
-                            id="otp-6"
-                            onKeyDown={handleKeyDown}
-                            onChange={(e)=> setOtpNumber({...otpNumber, otp_6: e.target.value})}/>
-                    </fieldset>
+                <fieldset className="form-body">
+                    <input 
+                        className="radius-left"
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-1" 
+                        id="otp-1"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,1)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_1: e.target.value})}
+                    />
+                    <input 
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-2" 
+                        id="otp-2"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,2)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_2: e.target.value})}
+                    />
+                    <input 
+                        className="radius-right"
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-3" 
+                        id="otp-3"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,3)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_3: e.target.value})}
+                    />
+                    <span className="hyphen">-</span>
+                    <input 
+                        className="radius-left"
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-4" 
+                        id="otp-4"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,4)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_4: e.target.value})}
+                    />
+                    <input 
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-5" 
+                        id="otp-5"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,5)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_5: e.target.value})}
+                    />
+                    <input 
+                        className="radius-right"
+                        type="text" 
+                        maxLength="1" 
+                        name="otp-6" 
+                        id="otp-6"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        onKeyUp={(e) => handleKeyUp(e,6)}
+                        onChange={(e)=> setOtpNumber({...otpNumber, otp_6: e.target.value})}
+                    />
                     <span className="time-out">{UpDatedTimer}</span>
-                </div>
+                </fieldset>
                 <div className="form-footer">
                     <fieldset>
-                        <input className={isFilled === false ? "bg-gray" : "bg-blue"} id="submit-button" type="submit" value="Verify and Proceed"/>
+                        <input 
+                            className={isFilled === false ? "bg-gray" : "bg-blue"} 
+                            id="submit-button" 
+                            type="submit" 
+                            value="Verify and Proceed"
+                        />
                     </fieldset>
                     <div>
                         <a>Regenerate OTP</a>
