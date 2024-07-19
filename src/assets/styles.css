@@ -136,22 +136,18 @@ form span.back-button{
     justify-content: center;
     width: 100%;
 }
-.form-body fieldset{
-    border: 1.5px solid #CAD0DC;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 80px;
-    overflow: hidden;
-}
-.form-body fieldset input#otp-1, #otp-2, #otp-4, #otp-5{
-    border-right: 1.5px solid #CAD0DC;
-}
-.form-body fieldset input{
-    border: transparent;
-    font-size: 20px;
-    height: 100%;
+.form-body input{
+    border: 1.5px solid #C3CAD6;
+    height: 60px;
     text-align: center;
-    width: 59px;
+    font-size: 20px;
+    width: 57px;
+}
+.radius-left{
+    border-radius: 10px 0 0 10px;
+}
+.radius-right{
+    border-radius: 0 10px 10px 0;
 }
 .form-body .hyphen{
     color: #CAD0DC;
