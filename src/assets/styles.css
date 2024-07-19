@@ -1,0 +1,194 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+body{
+    font-family: sans-serif;
+    height: 100%;
+}
+main{
+    align-items: center;
+    background-color: #c0c0c0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+}
+main div{
+    text-align: center;
+}
+main div h4{
+    font-size: 24px;
+}
+main div p{
+    font-size: 18px;
+    margin: 15px 0;
+}
+main div button{
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin: 20px;
+    padding: 12px;
+}
+main button:hover{
+    border: 2px solid #0a4ac2bc;
+    box-shadow: 1px 1px 3px #235dc7;
+    cursor: pointer;
+}
+
+main button svg{
+    padding-left: 8px;
+}
+.form-wrapper{
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.747);
+    display: none;
+    justify-content: center;
+    min-height: 100vh;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.d-flex{
+    display: flex;
+}
+form{
+    background-color: white;
+    border: 1.5px solid #DDDDDE;
+    border-radius: 8px;
+    box-shadow: 2px 2px 2px #E6E6E7;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+    padding: 0px 40px;
+    position: relative;
+    height: 500px;
+    width: 500px;
+}
+form span.back-button{
+    color: #0A49C2;
+    cursor: pointer;
+    left: 15px;
+    position: absolute;
+    top: 25px;
+}
+.form-header, .form-body{
+    margin-bottom: 35px;
+}
+.form-header h3{
+    font-size: 26px;
+}
+.form-header p{
+    font-size: 14px;
+    line-height: 20px;
+    margin: 10px 0;
+}
+.form-body{
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+.form-body fieldset{
+    border: 1.5px solid #CAD0DC;
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 80px;
+    overflow: hidden;
+}
+.form-body fieldset input#otp-1, #otp-2, #otp-4, #otp-5{
+    border-right: 1.5px solid #CAD0DC;
+}
+.form-body fieldset input{
+    border: transparent;
+    font-size: 20px;
+    height: 100%;
+    text-align: center;
+    width: 59px;
+}
+.form-body .hyphen{
+    color: #CAD0DC;
+    font-size: 18px;
+    text-align: center;
+    width: 25px;
+}
+.form-body span.time-out{
+    color: rgba(128, 128, 128, 0.562);
+    display: block;
+    font-size: 12px;
+    padding-top: 10px;
+    text-align: right;
+    width: 100%;
+}
+.form-footer fieldset input{
+    border: none;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px #2051ac;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    width: 100%;
+}
+.bg-blue{
+    background-color: #0A49C2;
+    cursor: pointer;
+}
+.bg-gray{
+    background-color: #8195ba;
+}
+.form-footer  div{
+    color: #0A49C2;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 40px 0 10px;
+    text-align: center;
+    width: 100%;
+}
