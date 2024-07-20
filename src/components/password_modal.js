@@ -9,15 +9,29 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
         otp_5:"",
         otp_6:""
     })
+    const [isClicked, setIsClicked] = useState(false);
     const[isFilled, setIsFilled] = useState(false);
     const[timer, setTimer] = useState(600);
     const UpDatedTimer = `${String(Math.floor(timer / 60)).padStart(2, "0")}:${String(timer % 60).padStart(2, "0")}`
 
 //Funcion para que solo lea las teclas que son numeros/tab/delete
     function handleKeyDown(e) {
+        let currentInput= document.activeElement;
+
         if (isNaN(e.key) && e.keyCode !== 9 && e.keyCode !== 8) {
             e.preventDefault(); // Prevenir la entrada del caracter
-        };
+        }
+        if (e.key === 'Backspace' && currentInput.value === "") {
+            let previousInput = currentInput.previousSibling;
+            while (previousInput && previousInput.nodeName.toLowerCase() !== 'input') {
+                previousInput = previousInput.previousSibling;
+            };
+            if(previousInput) {
+                previousInput.focus();
+            }else{
+                currentInput.focus()
+            }
+        }
     };
 //Funcion para cambiar de hover
     function handleKeyUp(e, index) {
@@ -28,15 +42,7 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
                     nextInput = nextInput.nextSibling;
                 }
             nextInput.focus()
-        } else if (e.key === 'Backspace') {
-            let previousInput = currentInput.previousSibling;
-            while (previousInput && previousInput.nodeName.toLowerCase() !== 'input') {
-                previousInput = previousInput.previousSibling;
-            };
-            if (previousInput) {
-                previousInput.focus();
-            };
-        };
+        } 
     };
 // Comienza conteo para enviar un nuevo codigo
     useEffect(() => {
@@ -61,7 +67,6 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
 
 //Valida cantidad de numeros dentro del otp
     useEffect(() => {
-        console.log("otpNumber:", otpNumber);
         const allFilled = Object.values(otpNumber).every(value => value !== "");
         setIsFilled(allFilled)
 
