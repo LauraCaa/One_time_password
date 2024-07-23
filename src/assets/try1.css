@@ -1,0 +1,174 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body{
+    font-family: sans-serif;
+    height: 100%;
+}
+main{
+    align-items: center;
+    background-color: #8195BA;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    position: relative;
+}
+.main-content h2{
+    font-size: 24px;
+}
+.main-content p{
+    font-size: 18px;
+    margin: 20px 0;
+}
+.main-content button{
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 15px 25px;
+}
+.form-wrapper{
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.314);
+    display: none;
+    justify-content: center;
+    min-height: 100vh;
+    position: absolute;
+    width: 100%;
+}
+.d-flex{
+    display: flex;
+}
+.form-container{
+    background-color: white;
+    border: 1px solid #DDDDDE;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px rgb(218, 216, 216);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 410px;
+    padding: 30px;
+    position: relative;
+    width: 420px;
+}
+.form-container >span{
+    color: #0A49C2;
+    cursor: pointer;
+    position: absolute;
+    left: 15px;
+    top: 25px;
+}
+.form-container .form-header {
+    margin: 20px 0;
+}
+.form-container .form-header h3{
+    font-size: 26px;
+    text-align: center;
+}
+.form-container .form-header p{
+    font-size: 14px;
+    text-align: center;
+    margin: 15px 5px;
+    line-height: 20px;
+}
+.form-container .form-body {
+    margin: 15px 0;
+    text-align: center;
+}
+.form-container .form-body input{
+    border: 1.5px solid #C3CAD6;
+    font-size: 26px;
+    height: 60px;
+    text-align: center;
+    width: 55px;
+}
+.form-container .form-body #oneTimeNumber1, #oneTimeNumber4{
+    border-right: none;
+    border-radius: 12px 0 0 12px;
+}
+.form-container .form-body #oneTimeNumber3, #oneTimeNumber6{
+    border-left: none;
+    border-radius: 0 12px 12px 0;
+}
+.form-container .form-body fieldset span{
+    color: #C3CAD6;
+    font-size: 20px;
+    margin: 15px;
+}
+.form-container .form-body >span{
+    color: #C3CAD6;
+    display: block;
+    font-size: 14px;
+    margin: 10px;
+    text-align: right;
+}
+.form-container .form-footer{
+    margin: 10px 0;
+}
+.form-container .form-footer fieldset input{
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+    width: 420px;
+}
+.gray-bg{
+    background-color: #8195BA;
+}
+.blue-bg{
+    background-color: #0A49C2;
+}
+.form-container .form-footer a{
+    color: #0A49C2;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+}
