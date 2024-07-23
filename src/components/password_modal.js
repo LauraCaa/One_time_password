@@ -9,9 +9,8 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
         otp_5:"",
         otp_6:""
     })
-    const [isClicked, setIsClicked] = useState(false);
     const[isFilled, setIsFilled] = useState(false);
-    const[timer, setTimer] = useState(600);
+    const[timer, setTimer] = useState(5600);
     const UpDatedTimer = `${String(Math.floor(timer / 60)).padStart(2, "0")}:${String(timer % 60).padStart(2, "0")}`
 
 //Funcion para que solo lea las teclas que son numeros/tab/delete
@@ -38,12 +37,19 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
         let currentInput= document.activeElement;
         if(!isNaN(e.key) && index < 6){
             let nextInput = currentInput.nextSibling;
-                while(nextInput && nextInput.nodeName.toLowerCase() !== 'input'){
-                    nextInput = nextInput.nextSibling;
-                }
+            while(nextInput && nextInput.nodeName.toLowerCase() !== 'input'){
+                nextInput = nextInput.nextSibling;
+            }
             nextInput.focus()
         } 
     };
+
+//Valida cantidad de numeros dentro del otp
+    useEffect(() => {
+        const allFilled = Object.values(otpNumber).every(value => value !== "");
+        setIsFilled(allFilled)
+
+    }, [otpNumber]);
 // Comienza conteo para enviar un nuevo codigo
     useEffect(() => {
         if(timer > 0 && isOpen){
@@ -58,19 +64,12 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
             setTimeout(() => {
                 alert(error.message);
                 toggleIsOpen(false);
-                setTimer(600)
+                setTimer(5600)
             }, 100);
         }else{
-            setTimer(600)
+            setTimer(5600)
         }
     }, [isOpen, timer])  
-
-//Valida cantidad de numeros dentro del otp
-    useEffect(() => {
-        const allFilled = Object.values(otpNumber).every(value => value !== "");
-        setIsFilled(allFilled)
-
-    }, [otpNumber]);
 
 //Activa o desactiva el button
     useEffect(() => {
