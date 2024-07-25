@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
 
 export default function Otp({toggleIsOpen, isOpen}) {
-    const[oneTimeNumbers, setOneTimeNumbers] = useState({
-        otp1: "",
-        otp2: "",
-        otp3: "",
-        otp4: "",
-        otp5: "",
-        otp6: ""
-    });
+    const[oneTimeNumbers, setOneTimeNumbers] = useState({});
     const[isFilled, setIsFilled] = useState(false);
+    const[timer, setTimer]= useState(600);
+    const newTimer = `${String(Math.floor(timer/60)).padStart(2, '0')}: ${String(Math.floor(timer%60)).padStart(2, '0')}`
 
     
     function handleKeyDown(e) {
@@ -24,9 +19,7 @@ export default function Otp({toggleIsOpen, isOpen}) {
             };
             if(previousInput){
                 previousInput.focus()
-            }else {
-                currentInput.focus()
-            };
+            }
         };
     };
     function handleKeyUp(e, index) {
@@ -36,29 +29,54 @@ export default function Otp({toggleIsOpen, isOpen}) {
             while(nextInput && nextInput.nodeName.toLowerCase() !== 'input'){
                 nextInput = nextInput.nextSibling
             };
-            nextInput.focus()
+            if(currentInput.value !== ""){
+                nextInput.focus()
+            }
         };
     };
 
     useEffect(() => {
-        let allFilled = Object.values(oneTimeNumbers).every(value =>  value !== "");
-        setIsFilled(allFilled);
+        const bodyForm = document.getElementById('otp-body');
+        const formInputs = bodyForm.getElementsByTagName('input');
+        let allfilled = true
+        
+        for(const input of formInputs){
+            if(input.value === ''){
+                allfilled = false;
+                break
+            };
+        };
+        setIsFilled(allfilled);
     }, [oneTimeNumbers]);
 
     useEffect(() => {
-        const submitButton = document.getElementById("submitButton");
-        if(submitButton){
-            submitButton.disabled = !isFilled;
+        if(timer > 0 && isOpen){
+            const intervalId = setInterval(() => {
+                setTimer((currentTimer) => currentTimer -1)
+            }, 1000)
+            return () => (
+                clearInterval(intervalId)
+            )
+        }else if(timer === 0 && isOpen){
+            const error = new Error('Your password has expired!!')
+            setTimeout(() => {
+                alert(error.message);
+                toggleIsOpen(false)
+                setTimer(600)
+            }, 100)
+        }else{
+            setTimer(600)
         }
-    }, [isFilled]);
+    }, [isOpen, timer, isFilled]);
 
     function handleSubmit(e) {
         e.preventDefault();
-        e.target.reset()
+        e.target.reset();
         setOneTimeNumbers({});
-        setIsFilled(false);
+        setIsFilled(!isFilled);
         setTimeout(() => {
             alert('Password confirmed successfully');
+            toggleIsOpen(false)
         }, 1000)
     };
    
@@ -75,7 +93,7 @@ export default function Otp({toggleIsOpen, isOpen}) {
                     <p>A one-time password has been generated and sent to the primary email address on your policy. Input the same to proceed further.<br></br> Note that the OTP sent to you will be valid for 10 minutes.</p>
                 </div>
                 <div className="form-body">
-                    <fieldset>
+                    <fieldset id="otp-body">
                         <input 
                             id="oneTimeNumber1"
                             name="oneTimeNumber1" 
@@ -132,7 +150,7 @@ export default function Otp({toggleIsOpen, isOpen}) {
                             onChange={(e) => setOneTimeNumbers({...oneTimeNumbers, otp6: e.target.value})}
                         />
                     </fieldset>
-                    <span>10:00</span>
+                    <span>{newTimer}</span>
                 </div>
                 <div className="form-footer">
                     <fieldset>
@@ -142,6 +160,7 @@ export default function Otp({toggleIsOpen, isOpen}) {
                             id="submitButton" 
                             type="submit" 
                             value="Verify and proceed"
+                            disable={!isFilled}
                         />
                     </fieldset>
                     <a>Regenerate OTP</a>

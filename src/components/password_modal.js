@@ -1,14 +1,7 @@
 import {useState, useEffect} from "react";
 
 export default function PasswordModal({toggleIsOpen, isOpen}) {
-    const[otpNumber, setOtpNumber] = useState({
-        otp_1:"",
-        otp_2:"",
-        otp_3:"",
-        otp_4:"",
-        otp_5:"",
-        otp_6:""
-    })
+    const[otpNumber, setOtpNumber] = useState({});
     const[isFilled, setIsFilled] = useState(false);
     const[timer, setTimer] = useState(5600);
     const UpDatedTimer = `${String(Math.floor(timer / 60)).padStart(2, "0")}:${String(timer % 60).padStart(2, "0")}`
@@ -27,8 +20,6 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
             };
             if(previousInput) {
                 previousInput.focus();
-            }else{
-                currentInput.focus()
             }
         }
     };
@@ -40,16 +31,26 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
             while(nextInput && nextInput.nodeName.toLowerCase() !== 'input'){
                 nextInput = nextInput.nextSibling;
             }
-            nextInput.focus()
+            if(currentInput.value !== ""){
+                nextInput.focus()
+            }
         } 
     };
 
 //Valida cantidad de numeros dentro del otp
     useEffect(() => {
-        const allFilled = Object.values(otpNumber).every(value => value !== "");
-        setIsFilled(allFilled)
-
+        const bodyForm = document.getElementById('otp-body');
+        const inputsText = bodyForm.getElementsByTagName('input');
+        let result = true;
+        for (const input of inputsText){
+            if(input.value === ""){
+                result = false;
+                break;
+            };
+        };
+        setIsFilled(result);
     }, [otpNumber]);
+
 // Comienza conteo para enviar un nuevo codigo
     useEffect(() => {
         if(timer > 0 && isOpen){
@@ -69,15 +70,7 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
         }else{
             setTimer(5600)
         }
-    }, [isOpen, timer])  
-
-//Activa o desactiva el button
-    useEffect(() => {
-        const submitButton = document.getElementById("submit-button");
-        if (submitButton) {
-            submitButton.disabled = !isFilled;
-        }
-    }, [isFilled]); 
+    }, [isOpen, timer, isFilled])  
 
 //Controla el comportamiento al dar el submit
     function handleSubmit(event) {
@@ -103,7 +96,7 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
                     <h3>One Time Password</h3>
                     <p>A one-time password has been generated and sent to the primary email address on your policy. Input the same to proceed further. Note that the OTP sent to you will be valid for 10 minutes.</p>
                 </div>
-                <fieldset className="form-body">
+                <fieldset className="form-body" id="otp-body">
                     <input 
                         className="radius-left"
                         type="text" 
@@ -172,6 +165,7 @@ export default function PasswordModal({toggleIsOpen, isOpen}) {
                             id="submit-button" 
                             type="submit" 
                             value="Verify and Proceed"
+                            disabled={!isFilled}
                         />
                     </fieldset>
                     <div>
